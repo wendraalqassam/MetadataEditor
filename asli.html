@@ -10,7 +10,16 @@
     .node { cursor: pointer; font-weight: bold; color: #0d6efd; }
     .collapsed::before { content: "▶ "; font-size: 12px; }
     .expanded::before { content: "▼ "; font-size: 12px; }
-    .value, .attr-input { margin-left: 10px; width: 100%; max-width: 400px; display: inline-block; }
+    textarea.value, textarea.attr-input {
+        margin-left: 10px;
+        width: 100%;
+        max-width: 400px;
+        min-height: 28px;
+        resize: both;             /* bisa diresize */
+        display: inline-block;
+        font-family: monospace;
+        font-size: 0.85rem;
+    }
     .attr-label { color: #6c757d; font-size: 0.85em; margin-left: 5px; }
     .tree-container {
         max-height: 500px;
@@ -126,8 +135,7 @@ function parseXMLToTree(xmlNode, parentElement) {
                     attrLabel.className = "attr-label";
                     attrLabel.textContent = "@" + attr.name + "=";
 
-                    const attrInput = document.createElement("input");
-                    attrInput.type = "text";
+                    const attrInput = document.createElement("textarea");
                     attrInput.value = attr.value;
                     attrInput.className = "form-control form-control-sm attr-input";
 
@@ -148,8 +156,7 @@ function parseXMLToTree(xmlNode, parentElement) {
                     attrLabel.className = "attr-label";
                     attrLabel.textContent = "@" + attr.name + "=";
 
-                    const attrInput = document.createElement("input");
-                    attrInput.type = "text";
+                    const attrInput = document.createElement("textarea");
                     attrInput.value = attr.value;
                     attrInput.className = "form-control form-control-sm attr-input";
 
@@ -160,8 +167,7 @@ function parseXMLToTree(xmlNode, parentElement) {
                 }
             }
 
-            const valueInput = document.createElement("input");
-            valueInput.type = "text";
+            const valueInput = document.createElement("textarea");
             valueInput.value = child.textContent.trim();
             valueInput.className = "form-control form-control-sm value mt-1";
             nodeMap.set(valueInput, child);
@@ -174,14 +180,14 @@ function parseXMLToTree(xmlNode, parentElement) {
 }
 
 function updateXMLFromInputs() {
-    document.querySelectorAll("#treeContainer input.value").forEach(input => {
+    document.querySelectorAll("#treeContainer textarea.value").forEach(input => {
         const xmlNode = nodeMap.get(input);
         if (xmlNode) {
             xmlNode.textContent = input.value;
         }
     });
 
-    document.querySelectorAll("#treeContainer input.attr-input").forEach(input => {
+    document.querySelectorAll("#treeContainer textarea.attr-input").forEach(input => {
         const attrData = attrMap.get(input);
         if (attrData) {
             attrData.element.setAttribute(attrData.attrName, input.value);
@@ -289,21 +295,18 @@ document.getElementById("expandAllBtn").addEventListener("click", function () {
 document.getElementById("resetBtn").addEventListener("click", function () {
     if (!confirm("Yakin reset semua nilai dan atribut menjadi kosong?")) return;
 
-    // Kosongkan input di Tree View
-    document.querySelectorAll("#treeContainer input.value").forEach(input => input.value = "");
-    document.querySelectorAll("#treeContainer input.attr-input").forEach(input => input.value = "");
+    document.querySelectorAll("#treeContainer textarea.value").forEach(input => input.value = "");
+    document.querySelectorAll("#treeContainer textarea.attr-input").forEach(input => input.value = "");
 
-    // Update XMLDoc kosongkan value & atribut
-    document.querySelectorAll("#treeContainer input.value").forEach(input => {
+    document.querySelectorAll("#treeContainer textarea.value").forEach(input => {
         const xmlNode = nodeMap.get(input);
         if (xmlNode) xmlNode.textContent = "";
     });
-    document.querySelectorAll("#treeContainer input.attr-input").forEach(input => {
+    document.querySelectorAll("#treeContainer textarea.attr-input").forEach(input => {
         const attrData = attrMap.get(input);
         if (attrData) attrData.element.setAttribute(attrData.attrName, "");
     });
 
-    // Update XML di modal
     const serializer = new XMLSerializer();
     document.getElementById("xmlEditor").value = serializer.serializeToString(originalXMLDoc);
 });
