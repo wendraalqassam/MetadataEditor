@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>XML Metadata Editor</title>
+<title>XML Metadat Editor</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
     ul { list-style-type: none; padding-left: 20px; }
@@ -13,12 +13,12 @@
     textarea.value, textarea.attr-input {
         margin-left: 10px;
         width: 100%;
-        max-width: 400px;
-        min-height: 28px;
-        resize: both;             /* bisa diresize */
+        max-width: 500px;
+        min-height: 24px;
+        resize: both;
         display: inline-block;
-        font-family: monospace;
         font-size: 0.85rem;
+        font-family: monospace;
     }
     .attr-label { color: #6c757d; font-size: 0.85em; margin-left: 5px; }
     .tree-container {
@@ -57,15 +57,18 @@
 
         <div class="btn-group mt-2">
             <button id="exportBtn" class="btn btn-success">Export XML</button>
+            <button id="loadTemplateBtn" class="btn btn-primary">Load Template Metadata</button>
+            <button id="resetBtn" class="btn btn-warning">Reset Isian</button>
             <button id="viewBtn" class="btn btn-info">View/Edit XML</button>
             <button id="collapseAllBtn" class="btn btn-secondary">Collapse All</button>
             <button id="expandAllBtn" class="btn btn-secondary">Expand All</button>
-            <button id="resetBtn" class="btn btn-warning">Reset Isian</button>
+            
+            
         </div>
     </div>
 
     <div class="card p-3">
-        <h5 class="mb-3">Editor XML</h5>
+        <h5 class="mb-3">XML Tree View & Editor</h5>
         <div id="treeContainer" class="tree-container"></div>
     </div>
 </div>
@@ -208,7 +211,6 @@ function reloadTreeFromXML(xmlString) {
     document.getElementById("treeContainer").innerHTML = "";
     parseXMLToTree(originalXMLDoc.documentElement, document.getElementById("treeContainer"));
 
-    // Tampilkan juga di modal editor
     const serializer = new XMLSerializer();
     document.getElementById("xmlEditor").value = serializer.serializeToString(originalXMLDoc);
 }
@@ -309,6 +311,783 @@ document.getElementById("resetBtn").addEventListener("click", function () {
 
     const serializer = new XMLSerializer();
     document.getElementById("xmlEditor").value = serializer.serializeToString(originalXMLDoc);
+});
+
+// LOAD TEMPLATE
+document.getElementById("loadTemplateBtn").addEventListener("click", function () {
+    const templateXML = `<?xml version="1.0" encoding="UTF-8"?><!--Metadata generated with CatMDEdit version 5.0--><gmd:MD_Metadata xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gml="http://www.opengis.net/gml/" xmlns:gts="http://www.isotc211.org/2005/gts/" xmlns:xlink="http://www.w3.org/1999/xlink/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <gmd:fileIdentifier>
+        <gco:CharacterString>isifileidentifier</gco:CharacterString>
+    </gmd:fileIdentifier>
+    <gmd:language>
+        <gco:CharacterString>Bahasa Indonesia</gco:CharacterString>
+    </gmd:language>
+    <gmd:characterSet>
+        <gmd:MD_CharacterSetCode codeList="./resources/codeList.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</gmd:MD_CharacterSetCode>
+    </gmd:characterSet>
+    <gmd:parentIdentifier>
+        <gco:CharacterString>isifileidentifier</gco:CharacterString>
+    </gmd:parentIdentifier>
+    <gmd:hierarchyLevel>
+        <gmd:MD_ScopeCode codeList="./resources/codeList.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
+    </gmd:hierarchyLevel>
+    <gmd:hierarchyLevelName>
+        <gco:CharacterString/>
+    </gmd:hierarchyLevelName>
+    <gmd:contact>
+        <gmd:CI_ResponsibleParty>
+            <gmd:individualName>
+                <gco:CharacterString>namapenanggungjawab</gco:CharacterString>
+            </gmd:individualName>
+            <gmd:organisationName>
+                <gco:CharacterString>namaprodusen</gco:CharacterString>
+            </gmd:organisationName>
+            <gmd:positionName>
+                <gco:CharacterString>jabatan</gco:CharacterString>
+            </gmd:positionName>
+            <gmd:contactInfo>
+                <gmd:CI_Contact>
+                    <gmd:phone>
+                        <gmd:CI_Telephone>
+                            <gmd:voice>
+                                <gco:CharacterString>tlpon</gco:CharacterString>
+                            </gmd:voice>
+                            <gmd:facsimile>
+                                <gco:CharacterString>email</gco:CharacterString>
+                            </gmd:facsimile>
+                        </gmd:CI_Telephone>
+                    </gmd:phone>
+                    <gmd:address>
+                        <gmd:CI_Address>
+                            <gmd:city>
+                                <gco:CharacterString>Kota Palembang</gco:CharacterString>
+                            </gmd:city>
+                            <gmd:administrativeArea>
+                                <gco:CharacterString>alamat produsen</gco:CharacterString>
+                            </gmd:administrativeArea>
+                            <gmd:postalCode>
+                                <gco:CharacterString>kodepos</gco:CharacterString>
+                            </gmd:postalCode>
+                            <gmd:country>
+                                <gco:CharacterString>Indonesia</gco:CharacterString>
+                            </gmd:country>
+                            <gmd:electronicMailAddress>
+                                <gco:CharacterString>dinaspubmtrprovsumsel@gmail.com</gco:CharacterString>
+                            </gmd:electronicMailAddress>
+                        </gmd:CI_Address>
+                    </gmd:address>
+                    <gmd:onlineResource>
+                        <gmd:CI_OnlineResource>
+                            <gmd:linkage gco:nilReason="missing"/>
+                            <gmd:applicationProfile>
+                                <gco:CharacterString>namadinas</gco:CharacterString>
+                            </gmd:applicationProfile>
+                        </gmd:CI_OnlineResource>
+                    </gmd:onlineResource>
+                    <gmd:hoursOfService>
+                        <gco:CharacterString>Jam kerja: 08.00-16.00 WIB</gco:CharacterString>
+                    </gmd:hoursOfService>
+                    <gmd:contactInstructions>
+                        <gco:CharacterString>Hubungi saat jam dan hari kerja</gco:CharacterString>
+                    </gmd:contactInstructions>
+                </gmd:CI_Contact>
+            </gmd:contactInfo>
+            <gmd:role>
+                <gmd:CI_RoleCode codeList="./resources/codeList.xml#CI_RoleCode" codeListValue="PRODUSEN DATA">PRODUSEN DATA</gmd:CI_RoleCode>
+            </gmd:role>
+        </gmd:CI_ResponsibleParty>
+    </gmd:contact>
+<gmd:contact>
+        <gmd:CI_ResponsibleParty>
+            <gmd:individualName>
+                <gco:CharacterString>Rika Efianti, S.E.,M.M.</gco:CharacterString>
+            </gmd:individualName>
+            <gmd:organisationName>
+                <gco:CharacterString>Dinas Komunikasi dan Informatika Provinsi Sumatera Selatan</gco:CharacterString>
+            </gmd:organisationName>
+            <gmd:positionName>
+                <gco:CharacterString>Kepala Dinas</gco:CharacterString>
+            </gmd:positionName>
+            <gmd:contactInfo>
+                <gmd:CI_Contact>
+                    <gmd:phone>
+                        <gmd:CI_Telephone>
+                            <gmd:voice>
+                                <gco:CharacterString>(0711) 7443323</gco:CharacterString>
+                            </gmd:voice>
+                            <gmd:facsimile>
+                                <gco:CharacterString>(0711) 7443323</gco:CharacterString>
+                            </gmd:facsimile>
+                        </gmd:CI_Telephone>
+                    </gmd:phone>
+                    <gmd:address>
+                        <gmd:CI_Address>
+                            <gmd:city>
+                                <gco:CharacterString>Kota Palembang</gco:CharacterString>
+                            </gmd:city>
+                            <gmd:administrativeArea>
+                                <gco:CharacterString>Jl. Merdeka no.10 A, Talang Semut, Bukit Kecil</gco:CharacterString>
+                            </gmd:administrativeArea>
+                            <gmd:postalCode>
+                                <gco:CharacterString>30135</gco:CharacterString>
+                            </gmd:postalCode>
+                            <gmd:country>
+                                <gco:CharacterString>Indonesia</gco:CharacterString>
+                            </gmd:country>
+                            <gmd:electronicMailAddress>
+                                <gco:CharacterString>kominfo@sumselprov.go.id</gco:CharacterString>
+                            </gmd:electronicMailAddress>
+                        </gmd:CI_Address>
+                    </gmd:address>
+                    <gmd:onlineResource>
+                        <gmd:CI_OnlineResource>
+                            <gmd:linkage gco:nilReason="https://geoportal.sumselprov.go.id/"/>
+                            <gmd:applicationProfile>
+                                <gco:CharacterString>Dinas Komunikasi dan Informatika Provinsi Sumatera Selatan</gco:CharacterString>
+                            </gmd:applicationProfile>
+                        </gmd:CI_OnlineResource>
+                    </gmd:onlineResource>
+                    <gmd:hoursOfService>
+                        <gco:CharacterString>Jam kerja: 08.00-16.00 WIB</gco:CharacterString>
+                    </gmd:hoursOfService>
+                    <gmd:contactInstructions>
+                        <gco:CharacterString>Hubungi saat jam dan hari kerja</gco:CharacterString>
+                    </gmd:contactInstructions>
+                </gmd:CI_Contact>
+            </gmd:contactInfo>
+            <gmd:role>
+                <gmd:CI_RoleCode codeList="./resources/codeList.xml#CI_RoleCode" codeListValue="WALIDATA">WALIDATA</gmd:CI_RoleCode>
+            </gmd:role>
+        </gmd:CI_ResponsibleParty>
+    </gmd:contact>
+    <gmd:dateStamp>
+        <gco:Date>2022-09-28</gco:Date>
+    </gmd:dateStamp>
+    <gmd:metadataStandardName>
+        <gco:CharacterString>ISO 19115</gco:CharacterString>
+    </gmd:metadataStandardName>
+    <gmd:metadataStandardVersion>
+        <gco:CharacterString>ISO19115:2003/Cor 1 2006</gco:CharacterString>
+    </gmd:metadataStandardVersion>
+    <gmd:spatialRepresentationInfo>
+        <gmd:MD_VectorSpatialRepresentation>
+            <gmd:topologyLevel>
+                <gmd:MD_TopologyLevelCode codeList="./resources/codeList.xml#MD_TopologyLevelCode" codeListValue="geometryOnly">geometryOnly</gmd:MD_TopologyLevelCode>
+            </gmd:topologyLevel>
+            <gmd:geometricObjects>
+                <gmd:MD_GeometricObjects>
+                    <gmd:geometricObjectType>
+                        <gmd:MD_GeometricObjectTypeCode codeList="./resources/codeList.xml#MD_GeometricObjectTypeCode" codeListValue="curve">curve</gmd:MD_GeometricObjectTypeCode>
+                    </gmd:geometricObjectType>
+                    <gmd:geometricObjectCount>
+                        <gco:Integer>88</gco:Integer>
+                    </gmd:geometricObjectCount>
+                </gmd:MD_GeometricObjects>
+            </gmd:geometricObjects>
+        </gmd:MD_VectorSpatialRepresentation>
+    </gmd:spatialRepresentationInfo>
+    <gmd:referenceSystemInfo>
+        <gmd:MD_ReferenceSystem>
+            <gmd:referenceSystemIdentifier>
+                <gmd:RS_Identifier>
+                    <gmd:code>
+                        <gco:CharacterString>EPSG:4326</gco:CharacterString>
+                    </gmd:code>
+                </gmd:RS_Identifier>
+            </gmd:referenceSystemIdentifier>
+        </gmd:MD_ReferenceSystem>
+    </gmd:referenceSystemInfo>
+    <gmd:identificationInfo>
+        <gmd:MD_DataIdentification>
+            <gmd:citation>
+                <gmd:CI_Citation>
+                    <gmd:title>
+                        <gco:CharacterString>JUDULDATA</gco:CharacterString>
+                    </gmd:title>
+                    <gmd:date>
+                        <gmd:CI_Date>
+                            <gmd:date>
+                                <gco:Date>TANGGALDIBUAT</gco:Date>
+                            </gmd:date>
+                            <gmd:dateType>
+                                <gmd:CI_DateTypeCode codeList="./resources/codeList.xml#CI_DateTypeCode" codeListValue="publication">publication</gmd:CI_DateTypeCode>
+                            </gmd:dateType>
+                        </gmd:CI_Date>
+                    </gmd:date>
+                    <gmd:citedResponsibleParty>
+                        <gmd:CI_ResponsibleParty>
+                            <gmd:individualName>
+                                <gco:CharacterString>NAMAPENANGGUNGJAWABPRODUSEN</gco:CharacterString>
+                            </gmd:individualName>
+                            <gmd:organisationName>
+                                <gco:CharacterString>DINASPRODUSEN</gco:CharacterString>
+                            </gmd:organisationName>
+                            <gmd:positionName>
+                                <gco:CharacterString>JABATAN</gco:CharacterString>
+                            </gmd:positionName>
+                            <gmd:contactInfo>
+                                <gmd:CI_Contact>
+                                    <gmd:phone>
+                                    <gmd:CI_Telephone>
+                                    <gmd:voice>
+                                    <gco:CharacterString>TLPON</gco:CharacterString>
+                                    </gmd:voice>
+                                    </gmd:CI_Telephone>
+                                    </gmd:phone>
+                                    <gmd:address>
+                                    <gmd:CI_Address>
+                                    <gmd:city>
+                                    <gco:CharacterString>Kota Palembang</gco:CharacterString>
+                                    </gmd:city>
+                                    <gmd:administrativeArea>
+                                    <gco:CharacterString>ALAMATKANTOR</gco:CharacterString>
+                                    </gmd:administrativeArea>
+                                    <gmd:postalCode>
+                                    <gco:CharacterString>KODEPOS</gco:CharacterString>
+                                    </gmd:postalCode>
+                                    <gmd:country>
+                                    <gco:CharacterString>Indonesia</gco:CharacterString>
+                                    </gmd:country>
+                                    </gmd:CI_Address>
+                                    </gmd:address>
+                                    <gmd:hoursOfService>
+                                    <gco:CharacterString>Jam Kerja : 07.30 s/d 16.00 WIB</gco:CharacterString>
+                                    </gmd:hoursOfService>
+                                    <gmd:contactInstructions>
+                                    <gco:CharacterString>Hubung di saat Jam dan Hari Kerja</gco:CharacterString>
+                                    </gmd:contactInstructions>
+                                </gmd:CI_Contact>
+                            </gmd:contactInfo>
+                            <gmd:role>
+                                <gmd:CI_RoleCode codeList="./resources/codeList.xml#CI_RoleCode" codeListValue="PRODUSEN DATA">PRODUSEN DATA</gmd:CI_RoleCode>
+                            </gmd:role>
+                        </gmd:CI_ResponsibleParty>
+                    </gmd:citedResponsibleParty>
+                </gmd:CI_Citation>
+            </gmd:citation>
+            <gmd:abstract>
+                <gco:CharacterString>PENJELASAN TERKAIT DATA</gco:CharacterString>
+            </gmd:abstract>
+            <gmd:purpose>
+                <gco:CharacterString>TUJUAN DATA DIBUAT</gco:CharacterString>
+            </gmd:purpose>
+            <gmd:credit>
+                <gco:CharacterString>NAMA DINAS PRODUSEN</gco:CharacterString>
+            </gmd:credit>
+            <gmd:status>
+                <gmd:MD_ProgressCode codeList="./resources/codeList.xml#MD_ProgressCode" codeListValue="completed">completed</gmd:MD_ProgressCode>
+            </gmd:status>
+            <gmd:pointOfContact>
+                <gmd:CI_ResponsibleParty>
+                    <gmd:individualName>
+                        <gco:CharacterString>NAMA PENANGGUNG JAWAB</gco:CharacterString>
+                    </gmd:individualName>
+                    <gmd:organisationName>
+                        <gco:CharacterString>NAMA DINAS</gco:CharacterString>
+                    </gmd:organisationName>
+                    <gmd:positionName>
+                        <gco:CharacterString>JABATAN</gco:CharacterString>
+                    </gmd:positionName>
+                    <gmd:contactInfo>
+                        <gmd:CI_Contact>
+                            <gmd:phone>
+                                <gmd:CI_Telephone>
+                                    <gmd:voice>
+                                    <gco:CharacterString>TLPON</gco:CharacterString>
+                                    </gmd:voice>
+                                </gmd:CI_Telephone>
+                            </gmd:phone>
+                            <gmd:address>
+                                <gmd:CI_Address>
+                                    <gmd:city>
+                                    <gco:CharacterString>Kota Palembang</gco:CharacterString>
+                                    </gmd:city>
+                                    <gmd:administrativeArea>
+                                    <gco:CharacterString>ALAMAT DINAS</gco:CharacterString>
+                                    </gmd:administrativeArea>
+                                    <gmd:postalCode>
+                                    <gco:CharacterString>KODEPOS</gco:CharacterString>
+                                    </gmd:postalCode>
+                                    <gmd:country>
+                                    <gco:CharacterString>Indonesia</gco:CharacterString>
+                                    </gmd:country>
+                                    <gmd:electronicMailAddress>
+                                    <gco:CharacterString>EMAIL</gco:CharacterString>
+                                    </gmd:electronicMailAddress>
+                                </gmd:CI_Address>
+                            </gmd:address>
+                            <gmd:hoursOfService>
+                                <gco:CharacterString>Jam Kerja : 07.30 s/d 16.00 WIB</gco:CharacterString>
+                            </gmd:hoursOfService>
+                            <gmd:contactInstructions>
+                                <gco:CharacterString>Hubungi disaat Jam dan Hari Kerja</gco:CharacterString>
+                            </gmd:contactInstructions>
+                        </gmd:CI_Contact>
+                    </gmd:contactInfo>
+                    <gmd:role>
+                        <gmd:CI_RoleCode codeList="./resources/codeList.xml#CI_RoleCode" codeListValue="PRODUSEN DATA">PRODUSEN DATA</gmd:CI_RoleCode>
+                    </gmd:role>
+                </gmd:CI_ResponsibleParty>
+            </gmd:pointOfContact>
+            <gmd:resourceMaintenance>
+                <gmd:MD_MaintenanceInformation>
+                    <gmd:maintenanceAndUpdateFrequency>
+                        <gmd:MD_MaintenanceFrequencyCode codeList="./resources/codeList.xml#MD_MaintenanceFrequencyCode" codeListValue="irregular">irregular</gmd:MD_MaintenanceFrequencyCode>
+                    </gmd:maintenanceAndUpdateFrequency>
+                    <gmd:updateScope>
+                        <gmd:MD_ScopeCode codeList="./resources/codeList.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
+                    </gmd:updateScope>
+                    <gmd:updateScopeDescription>
+                        <gmd:MD_ScopeDescription>
+                            <gmd:dataset>
+                                <gco:CharacterString>NAMA DATA YANG DIUPDATE</gco:CharacterString>
+                            </gmd:dataset>
+                        </gmd:MD_ScopeDescription>
+                    </gmd:updateScopeDescription>
+                    <gmd:contact>
+                        <gmd:CI_ResponsibleParty>
+                            <gmd:individualName>
+                                <gco:CharacterString>PENANGGUNGJAWAB</gco:CharacterString>
+                            </gmd:individualName>
+                            <gmd:organisationName>
+                                <gco:CharacterString>NAMA DINAS</gco:CharacterString>
+                            </gmd:organisationName>
+                            <gmd:positionName>
+                                <gco:CharacterString>JABATAN</gco:CharacterString>
+                            </gmd:positionName>
+                            <gmd:contactInfo>
+                                <gmd:CI_Contact>
+                                    <gmd:phone>
+                                    <gmd:CI_Telephone>
+                                    <gmd:voice>
+                                    <gco:CharacterString>TELEPON</gco:CharacterString>
+                                    </gmd:voice>
+                                    </gmd:CI_Telephone>
+                                    </gmd:phone>
+                                    <gmd:address>
+                                    <gmd:CI_Address>
+                                    <gmd:city>
+                                    <gco:CharacterString>Kota Palembang</gco:CharacterString>
+                                    </gmd:city>
+                                    <gmd:administrativeArea>
+                                    <gco:CharacterString>ALAMAT</gco:CharacterString>
+                                    </gmd:administrativeArea>
+                                    <gmd:postalCode>
+                                    <gco:CharacterString>KODEPOS</gco:CharacterString>
+                                    </gmd:postalCode>
+                                    <gmd:country>
+                                    <gco:CharacterString>Indonesia</gco:CharacterString>
+                                    </gmd:country>
+                                    <gmd:electronicMailAddress>
+                                    <gco:CharacterString>EMAIL</gco:CharacterString>
+                                    </gmd:electronicMailAddress>
+                                    </gmd:CI_Address>
+                                    </gmd:address>
+                                    <gmd:hoursOfService>
+                                    <gco:CharacterString>Jam Kerja : 07.30 s/d 16.00 WIB</gco:CharacterString>
+                                    </gmd:hoursOfService>
+                                    <gmd:contactInstructions>
+                                    <gco:CharacterString>Hubungi di saat Jam dan Hari Kerja</gco:CharacterString>
+                                    </gmd:contactInstructions>
+                                </gmd:CI_Contact>
+                            </gmd:contactInfo>
+                            <gmd:role>
+                                <gmd:CI_RoleCode codeList="./resources/codeList.xml#CI_RoleCode" codeListValue="PRODUSEN DATA">PRODUSEN DATA</gmd:CI_RoleCode>
+                            </gmd:role>
+                        </gmd:CI_ResponsibleParty>
+                    </gmd:contact>
+                </gmd:MD_MaintenanceInformation>
+            </gmd:resourceMaintenance>
+            <gmd:resourceFormat>
+                <gmd:MD_Format>
+                    <gmd:name>
+                        <gco:CharacterString>SHP</gco:CharacterString>
+                    </gmd:name>
+                    <gmd:version>
+                        <gco:CharacterString>-</gco:CharacterString>
+                    </gmd:version>
+                </gmd:MD_Format>
+            </gmd:resourceFormat>
+            <gmd:descriptiveKeywords>
+                <gmd:MD_Keywords>
+                    <gmd:keyword>
+                        <gco:CharacterString>KEYWORD</gco:CharacterString>
+                    </gmd:keyword>
+                    <gmd:type>
+                        <gmd:MD_KeywordTypeCode codeList="./resources/codeList.xml#MD_KeywordTypeCode" codeListValue="theme">theme</gmd:MD_KeywordTypeCode>
+                    </gmd:type>
+                    <gmd:thesaurusName>
+                        <gmd:CI_Citation>
+                            <gmd:title>
+                                <gco:CharacterString>JUDUL LENGKAP DATA</gco:CharacterString>
+                            </gmd:title>
+                            <gmd:date gco:nilReason="missing"/>
+                        </gmd:CI_Citation>
+                    </gmd:thesaurusName>
+                </gmd:MD_Keywords>
+            </gmd:descriptiveKeywords>
+            <gmd:resourceSpecificUsage>
+                <gmd:MD_Usage>
+                    <gmd:specificUsage>
+                        <gco:CharacterString>KETENTUAN PENGGUNAAN</gco:CharacterString>
+                    </gmd:specificUsage>
+                    <gmd:usageDateTime>
+                        <gco:DateTime>2016-12-29T05:02:12</gco:DateTime>
+                    </gmd:usageDateTime>
+                    <gmd:userDeterminedLimitations>
+                        <gco:CharacterString>BATASAN PENGGUNAAN DATA</gco:CharacterString>
+                    </gmd:userDeterminedLimitations>
+                    <gmd:userContactInfo>
+                        <gmd:CI_ResponsibleParty>
+                            <gmd:individualName>
+                                <gco:CharacterString>PENANGGUNG JAWAB</gco:CharacterString>
+                            </gmd:individualName>
+                            <gmd:organisationName>
+                                <gco:CharacterString>NAMA DINAS PRODUSEN</gco:CharacterString>
+                            </gmd:organisationName>
+                            <gmd:positionName>
+                                <gco:CharacterString>JABATAN</gco:CharacterString>
+                            </gmd:positionName>
+                            <gmd:contactInfo>
+                                <gmd:CI_Contact>
+                                    <gmd:phone>
+                                    <gmd:CI_Telephone>
+                                    <gmd:voice>
+                                    <gco:CharacterString>TELEPON</gco:CharacterString>
+                                    </gmd:voice>
+                                    </gmd:CI_Telephone>
+                                    </gmd:phone>
+                                    <gmd:address>
+                                    <gmd:CI_Address>
+                                    <gmd:city>
+                                    <gco:CharacterString>Kota Palembang</gco:CharacterString>
+                                    </gmd:city>
+                                    <gmd:administrativeArea>
+                                    <gco:CharacterString>ALAMAT</gco:CharacterString>
+                                    </gmd:administrativeArea>
+                                    <gmd:postalCode>
+                                    <gco:CharacterString>KODEPOS</gco:CharacterString>
+                                    </gmd:postalCode>
+                                    <gmd:country>
+                                    <gco:CharacterString>Indonesia</gco:CharacterString>
+                                    </gmd:country>
+                                    <gmd:electronicMailAddress>
+                                    <gco:CharacterString>EMAIL</gco:CharacterString>
+                                    </gmd:electronicMailAddress>
+                                    </gmd:CI_Address>
+                                    </gmd:address>
+                                    <gmd:hoursOfService>
+                                    <gco:CharacterString>Jam Kerja : 07.30 s/d 16.00 WIB</gco:CharacterString>
+                                    </gmd:hoursOfService>
+                                    <gmd:contactInstructions>
+                                    <gco:CharacterString>Silakan Hubungi di saat Jam dan Hari Kerja</gco:CharacterString>
+                                    </gmd:contactInstructions>
+                                </gmd:CI_Contact>
+                            </gmd:contactInfo>
+                            <gmd:role>
+                                <gmd:CI_RoleCode codeList="./resources/codeList.xml#CI_RoleCode" codeListValue="PRODUSEN DATA">PRODUSEN DATA</gmd:CI_RoleCode>
+                            </gmd:role>
+                        </gmd:CI_ResponsibleParty>
+                    </gmd:userContactInfo>
+                </gmd:MD_Usage>
+            </gmd:resourceSpecificUsage>
+            <gmd:resourceConstraints>
+                <gmd:MD_Constraints>
+                    <gmd:useLimitation>
+                        <gco:CharacterString>BATAS PENGGUNAAN DATA</gco:CharacterString>
+                    </gmd:useLimitation>
+                </gmd:MD_Constraints>
+            </gmd:resourceConstraints>
+            <gmd:spatialRepresentationType>
+                <gmd:MD_SpatialRepresentationTypeCode codeList="./resources/codeList.xml#MD_SpatialRepresentationTypeCode" codeListValue="vector">vector</gmd:MD_SpatialRepresentationTypeCode>
+            </gmd:spatialRepresentationType>
+            <gmd:spatialResolution>
+                <gmd:MD_Resolution>
+                    <gmd:equivalentScale>
+                        <gmd:MD_RepresentativeFraction>
+                            <gmd:denominator>
+                                <gco:Integer>SKALA DATA</gco:Integer>
+                            </gmd:denominator>
+                        </gmd:MD_RepresentativeFraction>
+                    </gmd:equivalentScale>
+                </gmd:MD_Resolution>
+            </gmd:spatialResolution>
+            <gmd:language>
+                <gco:CharacterString>Bahasa Indonesia</gco:CharacterString>
+            </gmd:language>
+            <gmd:characterSet>
+                <gmd:MD_CharacterSetCode codeList="./resources/codeList.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</gmd:MD_CharacterSetCode>
+            </gmd:characterSet>
+            <gmd:topicCategory>
+                <gmd:MD_TopicCategoryCode>structure</gmd:MD_TopicCategoryCode>
+            </gmd:topicCategory>
+            <gmd:environmentDescription>
+                <gco:CharacterString>Data ini dapat diolah menggunakan Aplikasi Pengolahan Data Spasial seperti ArcGis, Qgis, GlobalMapper, dll</gco:CharacterString>
+            </gmd:environmentDescription>
+            <gmd:extent>
+                <gmd:EX_Extent>
+                    <gmd:description>
+                        <gco:CharacterString>Provinsi Sumatera Selatan</gco:CharacterString>
+                    </gmd:description>
+                    <gmd:geographicElement>
+                        <gmd:EX_GeographicBoundingBox>
+                            <gmd:extentTypeCode>
+                                <gco:Boolean>true</gco:Boolean>
+                            </gmd:extentTypeCode>
+                            <gmd:westBoundLongitude>
+                                <gco:Decimal>102.0644</gco:Decimal>
+                            </gmd:westBoundLongitude>
+                            <gmd:eastBoundLongitude>
+                                <gco:Decimal>106.0464</gco:Decimal>
+                            </gmd:eastBoundLongitude>
+                            <gmd:southBoundLatitude>
+                                <gco:Decimal>-4.91861</gco:Decimal>
+                            </gmd:southBoundLatitude>
+                            <gmd:northBoundLatitude>
+                                <gco:Decimal>-1.42028</gco:Decimal>
+                            </gmd:northBoundLatitude>
+                        </gmd:EX_GeographicBoundingBox>
+                    </gmd:geographicElement>
+                    <gmd:temporalElement gco:nilReason="missing"/>
+                    <gmd:verticalElement gco:nilReason="missing"/>
+                </gmd:EX_Extent>
+            </gmd:extent>
+        </gmd:MD_DataIdentification>
+    </gmd:identificationInfo>
+    <gmd:contentInfo>
+        <gmd:MD_FeatureCatalogueDescription>
+            <gmd:complianceCode>
+                <gco:Boolean>false</gco:Boolean>
+            </gmd:complianceCode>
+            <gmd:language>
+                <gco:CharacterString>Bahasa Indonesia</gco:CharacterString>
+            </gmd:language>
+            <gmd:includedWithDataset>
+                <gco:Boolean>false</gco:Boolean>
+            </gmd:includedWithDataset>
+            <gmd:featureCatalogueCitation gco:nilReason="missing"/>
+        </gmd:MD_FeatureCatalogueDescription>
+    </gmd:contentInfo>
+    <gmd:distributionInfo>
+        <gmd:MD_Distribution>
+            <gmd:distributionFormat>
+                <gmd:MD_Format>
+                    <gmd:name>
+                        <gco:CharacterString>XML</gco:CharacterString>
+                    </gmd:name>
+                    <gmd:version>
+                        <gco:CharacterString>SHP atau XML</gco:CharacterString>
+                    </gmd:version>
+                </gmd:MD_Format>
+            </gmd:distributionFormat>
+            <gmd:distributor>
+                <gmd:MD_Distributor>
+                    <gmd:distributorContact>
+                        <gmd:CI_ResponsibleParty>
+                            <gmd:individualName>
+                                <gco:CharacterString>Rika Efianti, S.E.,M.M.</gco:CharacterString>
+                            </gmd:individualName>
+                            <gmd:organisationName>
+                                <gco:CharacterString>Dinas Pekerjaan Umum Bina Marga dan Tata Ruang Provinsi Sumatera Selatan</gco:CharacterString>
+                            </gmd:organisationName>
+                            <gmd:positionName>
+                                <gco:CharacterString>Kepala Dinas Komunikasi dan Informatika Provinsi Sumatera Selatan</gco:CharacterString>
+                            </gmd:positionName>
+                            <gmd:contactInfo>
+                                <gmd:CI_Contact>
+                                    <gmd:phone>
+                                    <gmd:CI_Telephone>
+                                    <gmd:voice>
+                                    <gco:CharacterString>(0711) 7443323</gco:CharacterString>
+                                    </gmd:voice>
+                                    </gmd:CI_Telephone>
+                                    </gmd:phone>
+                                </gmd:CI_Contact>
+                            </gmd:contactInfo>
+                            <gmd:role gco:nilReason="missing"/>
+                        </gmd:CI_ResponsibleParty>
+                    </gmd:distributorContact>
+                    <gmd:distributorFormat gco:nilReason="https://geoportal.sumselprov.go.id/"/>
+                </gmd:MD_Distributor>
+            </gmd:distributor>
+             <gmd:transferOptions>
+                <gmd:MD_DigitalTransferOptions>
+                    <gmd:onLine>
+                        <gmd:CI_OnlineResource>
+                            <gmd:linkage>
+                                <gmd:URL>https://geoportal.sumselprov.go.id/geoserver/palapa/wms</gmd:URL>
+                            </gmd:linkage>
+                            <gmd:protocol>
+                                <gco:CharacterString>OGC:WMS</gco:CharacterString>
+                            </gmd:protocol>
+                            <gmd:name>
+                                <gco:CharacterString>NAMALAYER DI GEOPORTAL</gco:CharacterString>
+                            </gmd:name>
+                            <gmd:description>
+                                <gco:CharacterString>deskripsi</gco:CharacterString>
+                            </gmd:description>
+                        </gmd:CI_OnlineResource>
+                    </gmd:onLine>
+                </gmd:MD_DigitalTransferOptions>
+            </gmd:transferOptions>
+        </gmd:MD_Distribution>
+    </gmd:distributionInfo>
+    <gmd:dataQualityInfo>
+        <gmd:DQ_DataQuality>
+            <gmd:scope>
+                <gmd:DQ_Scope>
+                    <gmd:level>
+                        <gmd:MD_ScopeCode codeList="./resources/codeList.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
+                    </gmd:level>
+                    <gmd:extent>
+                        <gmd:EX_Extent>
+                            <gmd:description>
+                                <gco:CharacterString>Wilayah Provinsi Sumatera Selatan</gco:CharacterString>
+                            </gmd:description>
+                            <gmd:geographicElement>
+                                <gmd:EX_GeographicBoundingBox>
+                                    <gmd:westBoundLongitude>
+                                    <gco:Decimal>102.0644</gco:Decimal>
+                                    </gmd:westBoundLongitude>
+                                    <gmd:eastBoundLongitude>
+                                    <gco:Decimal>106.0464</gco:Decimal>
+                                    </gmd:eastBoundLongitude>
+                                    <gmd:southBoundLatitude>
+                                    <gco:Decimal>-4.91861</gco:Decimal>
+                                    </gmd:southBoundLatitude>
+                                    <gmd:northBoundLatitude>
+                                    <gco:Decimal>-1.42028</gco:Decimal>
+                                    </gmd:northBoundLatitude>
+                                </gmd:EX_GeographicBoundingBox>
+                            </gmd:geographicElement>
+                            <gmd:temporalElement gco:nilReason="missing"/>
+                            <gmd:verticalElement gco:nilReason="missing"/>
+                        </gmd:EX_Extent>
+                    </gmd:extent>
+                    <gmd:levelDescription gco:nilReason="missing"/>
+                </gmd:DQ_Scope>
+            </gmd:scope>
+            <gmd:report>
+                <gmd:DQ_AbsoluteExternalPositionalAccuracy>
+                    <gmd:evaluationMethodType>
+                        <gmd:DQ_EvaluationMethodTypeCode codeList="./resources/codeList.xml#DQ_EvaluationMethodTypeCode" codeListValue="indirect">indirect</gmd:DQ_EvaluationMethodTypeCode>
+                    </gmd:evaluationMethodType>
+                    <gmd:evaluationMethodDescription>
+                        <gco:CharacterString>0%</gco:CharacterString>
+                    </gmd:evaluationMethodDescription>
+                    <gmd:dateTime>
+                        <gco:DateTime>2024-12-31T05:51:51</gco:DateTime>
+                    </gmd:dateTime>
+                    <gmd:result gco:nilReason="missing"/>
+                </gmd:DQ_AbsoluteExternalPositionalAccuracy>
+            </gmd:report>
+            <gmd:lineage>
+                <gmd:LI_Lineage>
+                    <gmd:statement>
+                        <gco:CharacterString>PENJELASAN KUALITAS DATA</gco:CharacterString>
+                    </gmd:statement>
+                    <gmd:processStep>
+                        <gmd:LI_ProcessStep>
+                            <gmd:description>
+                                <gco:CharacterString>Data ini dibuat dengan Pengumpulan Data Geospasial dari berbagai sumber diantaranya Badan Informasi Geospasial, Citra Satelit, atau Dorne, Serta Instasi-instasi terkait lainnya</gco:CharacterString>
+                            </gmd:description>
+                        </gmd:LI_ProcessStep>
+                    </gmd:processStep>
+                    <gmd:source gco:nilReason="missing"/>
+                </gmd:LI_Lineage>
+            </gmd:lineage>
+        </gmd:DQ_DataQuality>
+    </gmd:dataQualityInfo>
+    <gmd:portrayalCatalogueInfo>
+        <gmd:MD_PortrayalCatalogueReference>
+            <gmd:portrayalCatalogueCitation>
+                <gmd:CI_Citation>
+                    <gmd:title>
+                        <gco:CharacterString>RUJUKAN PERATURAN TERKAIT DATA, PERGUB/SKGUB/ DAN LAINNYA</gco:CharacterString>
+                    </gmd:title>
+                    <gmd:date>
+                        <gmd:CI_Date>
+                            <gmd:date>
+                                <gco:Date>TANGGAL PERATURAN</gco:Date>
+                            </gmd:date>
+                            <gmd:dateType gco:nilReason="missing"/>
+                        </gmd:CI_Date>
+                    </gmd:date>
+                </gmd:CI_Citation>
+            </gmd:portrayalCatalogueCitation>
+        </gmd:MD_PortrayalCatalogueReference>
+    </gmd:portrayalCatalogueInfo>
+    <gmd:metadataConstraints>
+        <gmd:MD_Constraints>
+            <gmd:useLimitation>
+                <gco:CharacterString>Metadata harus dalam bentuk format XML</gco:CharacterString>
+            </gmd:useLimitation>
+        </gmd:MD_Constraints>
+    </gmd:metadataConstraints>
+    <gmd:metadataMaintenance>
+        <gmd:MD_MaintenanceInformation>
+            <gmd:maintenanceAndUpdateFrequency>
+                <gmd:MD_MaintenanceFrequencyCode codeList="./resources/codeList.xml#MD_MaintenanceFrequencyCode" codeListValue="irregular">irregular</gmd:MD_MaintenanceFrequencyCode>
+            </gmd:maintenanceAndUpdateFrequency>
+            <gmd:updateScope>
+                <gmd:MD_ScopeCode codeList="./resources/codeList.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
+            </gmd:updateScope>
+            <gmd:contact>
+                <gmd:CI_ResponsibleParty>
+                    <gmd:individualName>
+                        <gco:CharacterString>NAMAPRODUSEN</gco:CharacterString>
+                    </gmd:individualName>
+                    <gmd:organisationName>
+                        <gco:CharacterString>DINAS PRODUSEN</gco:CharacterString>
+                    </gmd:organisationName>
+                    <gmd:positionName>
+                        <gco:CharacterString>JABATAN</gco:CharacterString>
+                    </gmd:positionName>
+                    <gmd:contactInfo>
+                        <gmd:CI_Contact>
+                            <gmd:phone>
+                                <gmd:CI_Telephone>
+                                    <gmd:voice>
+                                    <gco:CharacterString>TELEPON</gco:CharacterString>
+                                    </gmd:voice>
+                                </gmd:CI_Telephone>
+                            </gmd:phone>
+                            <gmd:address>
+                                <gmd:CI_Address>
+                                    <gmd:city>
+                                    <gco:CharacterString>Kota Palembang</gco:CharacterString>
+                                    </gmd:city>
+                                    <gmd:administrativeArea>
+                                    <gco:CharacterString>ALAMAT</gco:CharacterString>
+                                    </gmd:administrativeArea>
+                                    <gmd:postalCode>
+                                    <gco:CharacterString>KODEPOS</gco:CharacterString>
+                                    </gmd:postalCode>
+                                    <gmd:country>
+                                    <gco:CharacterString>Indonesia</gco:CharacterString>
+                                    </gmd:country>
+                                    <gmd:electronicMailAddress>
+                                    <gco:CharacterString>EMAIL</gco:CharacterString>
+                                    </gmd:electronicMailAddress>
+                                </gmd:CI_Address>
+                            </gmd:address>
+                            <gmd:hoursOfService>
+                                <gco:CharacterString>Jam Kerja : 07.30 s/d 16.00 WIB</gco:CharacterString>
+                            </gmd:hoursOfService>
+                            <gmd:contactInstructions>
+                                <gco:CharacterString>Hubungi disaat Jam dan Hari Kerja</gco:CharacterString>
+                            </gmd:contactInstructions>
+                        </gmd:CI_Contact>
+                    </gmd:contactInfo>
+                    <gmd:role>
+                        <gmd:CI_RoleCode codeList="./resources/codeList.xml#CI_RoleCode" codeListValue="PRODUSEN DATA">PRODUSEN DATA</gmd:CI_RoleCode>
+                    </gmd:role>
+                </gmd:CI_ResponsibleParty>
+            </gmd:contact>
+        </gmd:MD_MaintenanceInformation>
+    </gmd:metadataMaintenance>
+</gmd:MD_Metadata>`;
+    reloadTreeFromXML(templateXML);
 });
 </script>
 
