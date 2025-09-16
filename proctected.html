@@ -35,8 +35,8 @@
     const hash = await sha256(pass);
 
     // Ganti dengan hash dari password yang benar
-    const correctHash = "089b88a12d26af9d6ed4d653a72c98488a6c0b957c48679a4695f6331e8f67bb"; // contoh: "password"
-
+    //const correctHash = "089b88a12d26af9d6ed4d653a72c98488a6c0b957c48679a4695f6331e8f67bb"; // contoh: "password"
+    const correctHash = "26ec9858ec18fc94bc0e30f3536331dff83ae8b2e8d8fd1657a1b64e596e2581"; 
     if (hash === correctHash) {
       document.getElementById("login").style.display = "none";
       document.getElementById("content").style.display = "block";
